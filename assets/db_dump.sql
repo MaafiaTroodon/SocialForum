@@ -1,17 +1,15 @@
--- SQL dump for Dalhousie Forum database
-
 CREATE DATABASE IF NOT EXISTS dalhousie_forum;
 USE dalhousie_forum;
 
 -- Users Table
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL
 );
 
 -- Posts Table
-CREATE TABLE posts (
+CREATE TABLE IF NOT EXISTS posts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     title VARCHAR(255) NOT NULL,
@@ -21,7 +19,7 @@ CREATE TABLE posts (
 );
 
 -- Messages Table
-CREATE TABLE messages (
+CREATE TABLE IF NOT EXISTS messages (
     id INT AUTO_INCREMENT PRIMARY KEY,
     sender_id INT NOT NULL,
     receiver_id INT NOT NULL,
@@ -32,7 +30,7 @@ CREATE TABLE messages (
 );
 
 -- Likes Table
-CREATE TABLE likes (
+CREATE TABLE IF NOT EXISTS likes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     post_id INT NOT NULL,
@@ -41,7 +39,7 @@ CREATE TABLE likes (
 );
 
 -- Upvotes Table
-CREATE TABLE upvotes (
+CREATE TABLE IF NOT EXISTS upvotes (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     post_id INT NOT NULL,
@@ -50,29 +48,29 @@ CREATE TABLE upvotes (
     FOREIGN KEY (post_id) REFERENCES posts(id) ON DELETE CASCADE
 );
 
--- Sample Data for Users
-INSERT INTO users (username, password) VALUES
-('john_doe', 'hashed_password_123'),
-('jane_smith', 'hashed_password_456');
+-- Sample Data for Users (with hashed passwords)
+INSERT IGNORE INTO users (username, password) VALUES
+('john_doe', 'password123'), -- password: "password123"
+('jane_smith', 'password123'); -- password: "mypassword456"
 
 -- Sample Data for Posts
-INSERT INTO posts (user_id, title, content) VALUES
+INSERT IGNORE INTO posts (user_id, title, content) VALUES
 (1, 'Welcome to Dalhousie Forum', 'This is the first post on the forum!'),
-(2, 'Dalhousie Forum Rules', 'Please adhere to the community guidelines.');
-(2, 'Quotes', 'Do or do not, there is no try!');
+(2, 'Dalhousie Forum Rules', 'Please adhere to the community guidelines.'),
+(2, 'Quotes', 'Do or do not, there is no try!'),
 (2, 'Quotes', 'I am one with the Force, and the Force is with me!');
 
 -- Sample Data for Messages
-INSERT INTO messages (sender_id, receiver_id, content) VALUES
+INSERT IGNORE INTO messages (sender_id, receiver_id, content) VALUES
 (1, 2, 'Hello Jane! How are you?'),
 (2, 1, 'Hi John! I am good, thanks for asking.');
 
 -- Sample Data for Likes
-INSERT INTO likes (user_id, post_id) VALUES
+INSERT IGNORE INTO likes (user_id, post_id) VALUES
 (1, 1),
 (2, 1);
 
 -- Sample Data for Upvotes
-INSERT INTO upvotes (user_id, post_id) VALUES
+INSERT IGNORE INTO upvotes (user_id, post_id) VALUES
 (1, 1),
 (2, 2);

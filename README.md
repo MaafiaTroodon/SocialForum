@@ -20,4 +20,4 @@ Write the response to this section in bullet points.
 
 ## Citations
 
-1. 
+1. Logo generated using DeepAI’s logo generator tool available at https://deepai.org/machine-learning-model/logo-generator, accessed on November 23, 2024.
