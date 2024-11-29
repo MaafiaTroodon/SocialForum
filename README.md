@@ -21,3 +21,8 @@ Write the response to this section in bullet points.
 ## Citations
 
 1. Logo generated using DeepAI’s logo generator tool available at https://deepai.org/machine-learning-model/logo-generator, accessed on November 23, 2024.
+
+1.	The content for the post titled Queens vs Dalhousie is adapted from Reddit at https://www.reddit.com/r/Dalhousie/comments/1bzgpfq/queens_vs_dalhousie/, accessed on November 28, 2024.
+	2.	The content for the post titled Honest thoughts, as a student what do you think of Dal? is adapted from Reddit at https://www.reddit.com/r/Dalhousie/comments/105vp5h/honest_thoughts_as_a_student_what_do_you_think_of/, accessed on November 28, 2024.
+	3.	The content for the post titled Dal reputation in Canada is adapted from Reddit at https://www.reddit.com/r/Dalhousie/comments/113bg75/dal_reputation_in_canada/, accessed on November 28, 2024.
+

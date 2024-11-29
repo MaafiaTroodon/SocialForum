@@ -12,6 +12,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/styles.css"> <!-- Custom CSS -->
+    
 </head>
 <body>
     <header>
@@ -19,12 +20,24 @@ if (session_status() === PHP_SESSION_NONE) {
             <div class="container-fluid">
                 <a class="navbar-brand" href="index.php">
                     <img src="img/logo-img.jpeg" alt="Dalhousie Forum Logo" class="d-inline-block align-text-top" style="height: 50px;">
-
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <div class="search-container">
+                                <input 
+                                    type="text" 
+                                    id="searchInput" 
+                                    placeholder="Search posts or users..."
+                                    onkeyup="debouncedSearch()" 
+                                />
+                                <div id="searchResults" class="search-results"></div>
+                            </div>
+                        </li>
+                    </ul>
                     <ul class="navbar-nav ms-auto">
                         <?php if (isset($_SESSION['user_id'])): ?>
                             <li class="nav-item"><a class="nav-link" href="new-post.php">New Post</a></li>
@@ -41,5 +54,79 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <!-- Bootstrap JS (for navbar toggle) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    let debounceTimeout;
+
+    function debouncedSearch() {
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(() => {
+            performSearch();
+        }, 300); // 300ms delay
+    }
+
+    async function performSearch() {
+        const query = document.getElementById('searchInput').value.trim();
+        if (query === '') {
+            // Reset posts if the query is empty
+            fetchPosts();
+            return;
+        }
+
+        try {
+            const response = await fetch('api/search.php?q=' + encodeURIComponent(query));
+            const results = await response.json();
+
+            if (results.success) {
+                filterAndHighlightPosts(results.data, query);
+            } else {
+                console.error('No results found:', results.error);
+            }
+        } catch (error) {
+            console.error('Error fetching search results:', error);
+        }
+    }
+
+    function filterAndHighlightPosts(data, query) {
+        const postFeed = document.getElementById('post-feed');
+        postFeed.innerHTML = ''; // Clear the existing posts
+
+        data.forEach(post => {
+            // Highlight the query in the title and content
+            const highlightedTitle = highlightText(post.title, query);
+            const highlightedContent = highlightText(post.content, query);
+
+            const postDiv = document.createElement('div');
+            postDiv.className = 'post';
+            postDiv.dataset.id = post.post_id;
+
+            postDiv.innerHTML = `
+                <div class="post-content">
+                    <h3>${highlightedTitle}</h3>
+                    <p>${highlightedContent}</p>
+                    <p><strong>Author:</strong> ${post.username}</p>
+                    <p><em>Posted on:</em> ${new Date(post.created_at).toLocaleString()}</p>
+                </div>
+                <div class="action-container">
+                    <button class="edit-button" onclick="editPost(${post.post_id}, '${post.title}', '${post.content}')">✏️ Edit</button>
+                    <button class="delete-button" onclick="deletePost(${post.post_id})">🗑️ Delete</button>
+                </div>
+            `;
+
+            postFeed.appendChild(postDiv);
+        });
+    }
+
+    function highlightText(text, query) {
+        const regex = new RegExp(`(${query})`, 'gi'); // Create a regex to match the query case-insensitively
+        return text.replace(regex, '<span class="highlight">$1</span>'); // Wrap matches in a span
+    }
+</script>
+
+<style>
+    .highlight {
+        background-color: yellow; /* Highlight matching text with yellow */
+        font-weight: bold;
+    }
+</style>
 </body>
 </html>

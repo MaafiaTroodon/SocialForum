@@ -39,3 +39,61 @@ h1 {
         font-size: 0.9rem;
     }
 }
+
+/* Post Structure */
+.post {
+    display: flex;
+    flex-direction: column; /* Stack content and vote container vertically */
+    background-color: #ffffff;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+/* Voting Section */
+.vote-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px; /* Space between content and vote container */
+}
+
+/* Upvote/Downvote Buttons */
+.upvote-button,
+.downvote-button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #888;
+    transition: color 0.2s;
+    margin: 0 10px; /* Add spacing between buttons and vote count */
+}
+
+.upvote-button:hover {
+    color: #ff4500; /* Reddit orange */
+}
+
+.downvote-button:hover {
+    color: #7193ff; /* Reddit blue */
+}
+
+/* Vote Count */
+.vote-count {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .post {
+        padding: 10px;
+    }
+    .vote-container {
+        flex-direction: row;
+    }
+}

@@ -1,1 +1,0 @@
-// JavaScript functionality for Dalhousie Forum
