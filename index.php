@@ -9,14 +9,7 @@ require_once 'templates/header.php';
 
 require_once 'includes/db_connect.php';
 ?>
-<?php if (isset($_SESSION['notification'])): ?>
-    <script>
-        window.onload = function() {
-            addNotification('<?= $_SESSION['notification']['type'] ?>', '<?= $_SESSION['notification']['message'] ?>');
-        };
-    </script>
-    <?php unset($_SESSION['notification']); // Clear the notification after displaying ?>
-<?php endif; ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -57,7 +50,7 @@ require_once 'includes/db_connect.php';
             <input type="text" id="editTitle" required>
             <label for="editContent">Content:</label>
             <textarea id="editContent" required></textarea>
-            <button type="submit">Update</button>
+            <button type="submit" class="btn btn-success"><span>Update</span><em></em></button>
         </form>
     </div>
 </div>

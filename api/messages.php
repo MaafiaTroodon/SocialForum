@@ -1,32 +1,60 @@
 <?php
 session_start();
-require_once '../includes/db_connect.php'; // Adjust the path as needed
+require_once '../includes/db_connect.php'; // Ensure the database connection file is included
 
 header('Content-Type: application/json');
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    echo json_encode(['error' => 'Unauthorized']);
+    echo json_encode(['error' => 'Unauthorized. Please log in.']);
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+$user_id = $_SESSION['user_id'];
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    // Fetch all messages related to the logged-in user
+    try {
+        $stmt = $mysqli->prepare("
+            SELECT 
+                m.id, m.content, m.timestamp, 
+                s.username AS sender_name, 
+                r.username AS receiver_name, 
+                m.sender_id, m.receiver_id
+            FROM messages m
+            JOIN users s ON m.sender_id = s.id
+            JOIN users r ON m.receiver_id = r.id
+            WHERE m.sender_id = ? OR m.receiver_id = ?
+            ORDER BY m.timestamp DESC
+        ");
+        $stmt->bind_param("ii", $user_id, $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        $messages = [];
+        while ($row = $result->fetch_assoc()) {
+            $messages[] = $row;
+        }
+
+        echo json_encode($messages);
+    } catch (Exception $e) {
+        echo json_encode(['error' => 'Error fetching messages: ' . $e->getMessage()]);
+    }
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Handle sending a new message
     $data = json_decode(file_get_contents('php://input'), true);
 
-    if (isset($data['recipient']) && isset($data['message'])) {
+    if (isset($data['recipient'], $data['message'])) {
         $recipient = trim($data['recipient']);
         $message = trim($data['message']);
-        $sender_id = $_SESSION['user_id'];
 
-        // Validate input
         if (empty($recipient) || empty($message)) {
-            echo json_encode(['error' => 'Recipient and message are required.']);
+            echo json_encode(['error' => 'Recipient and message fields are required.']);
             exit();
         }
 
         try {
-            // Find the recipient's ID
+            // Find the recipient's user ID
             $stmt = $mysqli->prepare("SELECT id FROM users WHERE username = ?");
             $stmt->bind_param("s", $recipient);
             $stmt->execute();
@@ -41,50 +69,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Insert the new message into the database
             $stmt = $mysqli->prepare("INSERT INTO messages (sender_id, receiver_id, content) VALUES (?, ?, ?)");
-            $stmt->bind_param("iis", $sender_id, $recipient_id, $message);
+            $stmt->bind_param("iis", $user_id, $recipient_id, $message);
             $stmt->execute();
 
-            echo json_encode(['success' => true]);
+            echo json_encode(['success' => true, 'message' => 'Message sent successfully.']);
         } catch (Exception $e) {
-            echo json_encode(['error' => $e->getMessage()]);
+            echo json_encode(['error' => 'Error sending message: ' . $e->getMessage()]);
         }
     } else {
         echo json_encode(['error' => 'Invalid request.']);
     }
-} elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Handle fetching messages
-    try {
-        // Fetch messages for the logged-in user
-        $stmt = $mysqli->prepare("
-            SELECT 
-                messages.sender_id, 
-                messages.receiver_id, 
-                messages.content, 
-                messages.timestamp,
-                sender.username AS sender_name,
-                receiver.username AS receiver_name
-            FROM messages
-            JOIN users AS sender ON messages.sender_id = sender.id
-            JOIN users AS receiver ON messages.receiver_id = receiver.id
-            WHERE messages.sender_id = ? OR messages.receiver_id = ?
-            ORDER BY messages.timestamp DESC
-        ");
-        
-        $user_id = $_SESSION['user_id'];
-        $stmt->bind_param("ii", $user_id, $user_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        $messages = [];
-        while ($row = $result->fetch_assoc()) {
-            $messages[] = $row;
-        }
-
-        echo json_encode($messages);
-    } catch (Exception $e) {
-        echo json_encode(['error' => $e->getMessage()]);
-    }
+} else {
+    echo json_encode(['error' => 'Invalid request method.']);
 }
 
 $mysqli->close();
-?>

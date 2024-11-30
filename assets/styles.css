@@ -340,3 +340,129 @@ textarea:focus {
     text-decoration: none;
     opacity: 0.75;
 }
+
+/* Modal styling */
+#editModal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    z-index: 1000;
+    overflow: hidden; /* Prevent scrollbars when modal is open */
+    display: flex; /* Use flexbox for centering */
+    justify-content: center; /* Horizontally center the modal */
+    align-items: center; /* Vertically center the modal */
+}
+
+/* Modal content styling */
+.modal-content {
+    background: #ffffff;
+    width: 90%; /* Adjust width for responsiveness */
+    max-width: 500px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: fadeIn 0.3s ease-in-out; /* Fade-in effect */
+    text-align: center; /* Center content inside the modal */
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Close button */
+.modal-content .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+    font-weight: bold;
+    background: none;
+    border: none;
+}
+
+/* Form input fields */
+#editPostForm label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    text-align: left; /* Align labels to the left */
+}
+
+#editPostForm input,
+#editPostForm textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Update button with animation */
+#editPostForm button {
+    cursor: pointer;
+    background-color: #000; /* Default black background */
+    width: auto;
+    height: 37px;
+    padding: 0 20px; /* Padding to make text-centered buttons responsive */
+    display: inline-flex; /* Flexbox for centering */
+    align-items: center; /* Vertical centering */
+    justify-content: center; /* Horizontal centering */
+    margin: 10px; /* Add space between buttons */
+    position: relative;
+    text-transform: uppercase;
+    font: bold 18px Arial, sans-serif;
+    color: #fff; /* White text */
+    border: none;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for visibility */
+    z-index: 0;
+    transition: all 0.3s ease;
+}
+
+/* Hover effect */
+#editPostForm button:hover {
+    background-color: #0056b3; /* Blue background on hover */
+    transform: scale(1.1); /* Slightly larger on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+/* Active (click) effect */
+#editPostForm button:active {
+    background-color: #003f7f; /* Darker blue on click */
+    transform: scale(1); /* Reset size on click */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Reduced shadow on click */
+}
+
+/* Add subtle shine animation */
+#editPostForm button::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 50%;
+    background: #fff; /* Slice color */
+    z-index: 0;
+    transition: width 0.3s cubic-bezier(.785, .135, .15, .86);
+}
+
+/* Hover shine animation */
+#editPostForm button:hover::before {
+    opacity: 1;
+    transform: rotate(45deg) translateX(100%);
+}

@@ -248,7 +248,6 @@ document.getElementById("editPostForm").addEventListener("submit", async functio
         console.error("Error editing post:", error);
     }
 });
-// Delete post functionality
 window.deletePost = async function (postId) {
     if (confirm("Are you sure you want to delete this post?")) {
         try {
@@ -261,12 +260,15 @@ window.deletePost = async function (postId) {
             const result = await response.json();
 
             if (result.success) {
-                alert("Post deleted successfully!");
-                fetchPosts();
+                addNotification("success", "Post deleted successfully!");
+                fetchPosts(); // Refresh posts
+            } else if (result.error === "Unauthorized action. This post does not belong to you.") {
+                addNotification("danger", "Unauthorized action. This post does not belong to you.");
             } else {
-                console.error(result.error || "Failed to delete post.");
+                addNotification("danger", result.error || "Failed to delete post.");
             }
         } catch (error) {
+            addNotification("danger", "An error occurred while deleting the post.");
             console.error("Error deleting post:", error);
         }
     }
@@ -305,6 +307,90 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchPosts();
 });
 
+async function fetchMessages() {
+    try {
+        const response = await fetch("api/messages.php"); // Ensure the API path is correct
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const messages = await response.json();
+
+        if (messages.error) {
+            addNotification("danger", messages.error);
+            console.error(messages.error);
+            return;
+        }
+
+        const receivedMessagesTable = document.getElementById("received-messages");
+        const sentMessagesTable = document.getElementById("sent-messages");
+
+        // Clear previous data
+        receivedMessagesTable.innerHTML = "";
+        sentMessagesTable.innerHTML = "";
+
+        messages.forEach((message) => {
+            const row = document.createElement("tr");
+
+            if (message.receiver_id === parseInt(user_id)) {
+                // Message received by the logged-in user
+                row.innerHTML = `
+                    <td>${message.sender_name}</td>
+                    <td>${message.content}</td>
+                    <td>${new Date(message.timestamp).toLocaleString()}</td>
+                `;
+                receivedMessagesTable.appendChild(row);
+            } else if (message.sender_id === parseInt(user_id)) {
+                // Message sent by the logged-in user
+                row.innerHTML = `
+                    <td>${message.receiver_name}</td>
+                    <td>${message.content}</td>
+                    <td>${new Date(message.timestamp).toLocaleString()}</td>
+                `;
+                sentMessagesTable.appendChild(row);
+            }
+        });
+
+        addNotification("success", "Messages fetched successfully!");
+    } catch (error) {
+        addNotification("danger", "Failed to fetch messages. Please try again.");
+        console.error("Error fetching messages:", error);
+    }
+}
+
+newMessageForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const recipient = document.getElementById('recipient').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if (!recipient || !message) {
+        addNotification('danger', 'Please fill in both fields.');
+        return;
+    }
+
+    try {
+        const response = await fetch('api/messages.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ recipient, message }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            addNotification('success', 'Message sent successfully!');
+            toggleMessageForm(); // Close the form
+            fetchMessages(); // Refresh messages
+        } else {
+            addNotification('danger', result.error || 'Failed to send the message.');
+        }
+    } catch (error) {
+        addNotification('danger', 'An error occurred. Please try again.');
+        console.error('Error sending message:', error);
+    }
+});
+
 function addNotification(type, message) {
     const notificationContainer = document.getElementById('notifications');
     if (!notificationContainer) return;
@@ -339,3 +425,5 @@ function addNotification(type, message) {
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+
