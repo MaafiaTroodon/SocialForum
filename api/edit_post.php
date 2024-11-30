@@ -9,47 +9,27 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-try {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $data = json_decode(file_get_contents('php://input'), true);
+$data = json_decode(file_get_contents('php://input'), true);
+$postId = intval($data['postId']);
+$title = trim($data['title']);
+$content = trim($data['content']);
+$userId = $_SESSION['user_id'];
 
-        if (isset($data['postId'], $data['title'], $data['content'])) {
-            $postId = intval($data['postId']);
-            $title = htmlspecialchars(trim($data['title']));
-            $content = htmlspecialchars(trim($data['content']));
-            $userId = $_SESSION['user_id'];
+$stmt = $mysqli->prepare("SELECT user_id FROM posts WHERE id = ?");
+$stmt->bind_param("i", $postId);
+$stmt->execute();
+$result = $stmt->get_result();
 
-            // Debugging: Log received data
-            error_log("Post ID: $postId, Title: $title, Content: $content, User ID: $userId");
-
-            // Check if the post belongs to the logged-in user
-            $stmt = $mysqli->prepare("SELECT user_id FROM posts WHERE id = ?");
-            $stmt->bind_param("i", $postId);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $post = $result->fetch_assoc();
-
-            if ($post && $post['user_id'] == $userId) {
-                // Update the post
-                $stmt = $mysqli->prepare("UPDATE posts SET title = ?, content = ? WHERE id = ?");
-                $stmt->bind_param("ssi", $title, $content, $postId);
-                if ($stmt->execute()) {
-                    echo json_encode(['success' => true]);
-                } else {
-                    echo json_encode(['error' => 'Failed to update post in the database.']);
-                }
-            } else {
-                echo json_encode(['error' => 'Unauthorized action.']);
-            }
-        } else {
-            echo json_encode(['error' => 'Invalid input.']);
-        }
+if ($result->num_rows > 0 && $result->fetch_assoc()['user_id'] == $userId) {
+    $stmt = $mysqli->prepare("UPDATE posts SET title = ?, content = ? WHERE id = ?");
+    $stmt->bind_param("ssi", $title, $content, $postId);
+    if ($stmt->execute()) {
+        echo json_encode(['success' => true]);
     } else {
-        echo json_encode(['error' => 'Invalid request method.']);
+        echo json_encode(['error' => 'Database update failed.']);
     }
-} catch (Exception $e) {
-    echo json_encode(['error' => $e->getMessage()]);
+} else {
+    echo json_encode(['error' => 'Unauthorized']);
 }
 
 $mysqli->close();
-?>
