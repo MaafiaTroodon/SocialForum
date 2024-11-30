@@ -65,7 +65,6 @@ class GridIcosahedron {
     }
 }
 
-// Forum Functionality
 async function fetchPosts() {
     try {
         const response = await fetch("api/posts.php");
@@ -79,10 +78,16 @@ async function fetchPosts() {
         }
 
         posts.forEach((post) => {
+            // Skip posts without valid data
+            if (!post.id || !post.title || !post.content) {
+                console.warn("Skipping invalid post:", post);
+                return;
+            }
+
             const postDiv = document.createElement("div");
             postDiv.className = "post";
             postDiv.dataset.id = post.id;
-        
+
             postDiv.innerHTML = `
                 <div class="post-content">
                     <h3>${post.title}</h3>
@@ -96,13 +101,13 @@ async function fetchPosts() {
                     <button class="downvote-button" onclick="toggleVote(${post.id}, 'downvote')">▼</button>
                 </div>
                 <div class="post-actions">
-                    <button onclick="editPost(${post.id}, '${post.title}', '${post.content}')">✏️ Edit</button>
-                    <button onclick="deletePost(${post.id})">🗑️ Delete</button>
-                    <button onclick="toggleCommentSection(${post.id})">💬 Comments</button>
+                    <a class="btn" onclick="editPost(${post.id}, '${post.title}', '${post.content}')"><span>Edit</span><em></em></a>
+                    <a class="btn" onclick="deletePost(${post.id})"><span>Delete</span><em></em></a>
+                    <a class="btn" onclick="toggleCommentSection(${post.id})"><span>Comments</span><em></em></a>
                 </div>
                 <div id="comment-section-${post.id}" class="comment-section" style="display: none;">
                     <textarea id="new-comment-${post.id}" placeholder="Add a comment"></textarea>
-                    <button class="add-comment-button" onclick="addComment(${post.id})">Post</button>
+                    <a class="btn add-comment-button" onclick="addComment(${post.id})"><span>Post</span><em></em></a>
                     <div class="comments"></div>
                 </div>
             `;
@@ -142,20 +147,24 @@ document.getElementById("editPostForm").addEventListener("submit", async functio
     const title = document.getElementById("editTitle").value;
     const content = document.getElementById("editContent").value;
 
+    console.log("Submitting edit:", { postId, title, content });
+
     try {
-        const response = await fetch("api/edit_post.php", { // Correct the path here
+        const response = await fetch("api/edit_post.php", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ postId, title, content }),
         });
+
         const result = await response.json();
+        console.log("Edit Response:", result);
 
         if (result.success) {
             alert("Post updated successfully!");
             closeModal();
-            fetchPosts(); // Refresh posts
+            fetchPosts(); // Refresh the posts
         } else {
-            alert(result.error || "Failed to update the post.");
+            alert(result.error || "Failed to update post.");
         }
     } catch (error) {
         console.error("Error editing post:", error);
@@ -197,11 +206,13 @@ window.toggleCommentSection = async function (postId) {
     }
 };
 
-// Edit post functionality
 window.editPost = function (postId, currentTitle, currentContent) {
+    console.log("Opening edit modal for Post ID:", postId);
+
     document.getElementById("editPostId").value = postId;
     document.getElementById("editTitle").value = currentTitle;
     document.getElementById("editContent").value = currentContent;
+
     document.getElementById("editModal").style.display = "block";
 };
 
@@ -226,17 +237,17 @@ document.getElementById("editPostForm").addEventListener("submit", async functio
         const result = await response.json();
 
         if (result.success) {
-            alert("Post updated successfully!");
+            addNotification('success', 'Post edited successfully!');
             closeModal();
-            fetchPosts();
+            fetchPosts(); // Refresh the posts
         } else {
-            alert(result.error || "Failed to update the post.");
+            addNotification('danger', result.error || 'Failed to update the post.');
         }
     } catch (error) {
+        addNotification('danger', 'An error occurred while editing the post.');
         console.error("Error editing post:", error);
     }
 });
-
 // Delete post functionality
 window.deletePost = async function (postId) {
     if (confirm("Are you sure you want to delete this post?")) {
@@ -293,3 +304,38 @@ document.addEventListener("DOMContentLoaded", () => {
     new GridIcosahedron(".grid-icosahedron");
     fetchPosts();
 });
+
+function addNotification(type, message) {
+    const notificationContainer = document.getElementById('notifications');
+    if (!notificationContainer) return;
+
+    const typeClasses = {
+        success: 'alert-success',
+        info: 'alert-info',
+        warning: 'alert-warning',
+        danger: 'alert-danger'
+    };
+
+    const notification = document.createElement('div');
+    notification.className = `alert ${typeClasses[type]} alert-dismissible fade show`;
+    notification.style.marginBottom = '10px';
+    notification.innerHTML = `
+        <strong>${capitalize(type)}!</strong> ${message}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    `;
+
+    notificationContainer.appendChild(notification);
+
+    // Automatically remove notification after 5 seconds
+    setTimeout(() => {
+        if (notificationContainer.contains(notification)) {
+            notificationContainer.removeChild(notification);
+        }
+    }, 5000);
+}
+
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}

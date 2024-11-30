@@ -126,6 +126,15 @@ if (!isset($_SESSION['user_id'])) {
         }
     }
 });
+async function fetchMessages() {
+    try {
+        const response = await fetch('api/messages.php');
+        const messages = await response.json();
+        // Process messages
+    } catch (error) {
+        addNotification('danger', 'Error fetching messages: ' + error.message);
+    }
+}
 
         setInterval(fetchMessages, 5000);
         fetchMessages();

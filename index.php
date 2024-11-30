@@ -6,8 +6,17 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 require_once 'templates/header.php';
+
 require_once 'includes/db_connect.php';
 ?>
+<?php if (isset($_SESSION['notification'])): ?>
+    <script>
+        window.onload = function() {
+            addNotification('<?= $_SESSION['notification']['type'] ?>', '<?= $_SESSION['notification']['message'] ?>');
+        };
+    </script>
+    <?php unset($_SESSION['notification']); // Clear the notification after displaying ?>
+<?php endif; ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -52,6 +61,7 @@ require_once 'includes/db_connect.php';
         </form>
     </div>
 </div>
+
 
     <?php include 'includes/footer.php'; ?>
 </body>

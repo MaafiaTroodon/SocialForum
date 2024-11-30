@@ -14,6 +14,10 @@ if (session_status() === PHP_SESSION_NONE) {
     <link rel="stylesheet" href="assets/styles.css"> <!-- Custom CSS -->
     
 </head>
+<!-- Notifications -->
+<section id="notifications" style="position: fixed; top: 10px; right: 10px; z-index: 1000; width: 300px;">
+    <!-- Dynamic Notifications will be added here -->
+</section>
 <body>
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">

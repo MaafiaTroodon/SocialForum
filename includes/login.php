@@ -14,7 +14,10 @@ if (isset($_SESSION['user_id'])) {
 
 // Initialize error message
 $error = '';
-
+// After successful login
+$_SESSION['notification'] = ['type' => 'success', 'message' => 'Welcome back, ' . htmlspecialchars($username) . '!'];
+header('Location: index.php');
+exit();
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username']);

@@ -140,38 +140,6 @@ header {
     justify-content: flex-start; /* Align buttons to the left */
 }
 
-/* General button styling */
-.post-actions button {
-    padding: 10px 15px;
-    font-size: 14px;
-    font-weight: 500;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-/* Hover and active states for buttons */
-.post-actions button:hover {
-    background-color: #0056b3;
-    transform: scale(1.05); /* Slightly enlarge button */
-}
-
-.post-actions button:active {
-    background-color: #003f7f;
-    transform: scale(1); /* Reset scale */
-}
-
-/* Comment section styling */
-.comment-section {
-    margin-top: 15px;
-    padding: 10px;
-    border-top: 1px solid #ddd;
-    background: #f9f9f9; /* Light background for contrast */
-    border-radius: 5px;
-}
 
 /* Textarea styling */
 textarea {
@@ -232,4 +200,143 @@ textarea:focus {
         flex-direction: column; /* Stack vote buttons vertically on small screens */
         gap: 5px;
     }
+}
+.btn {
+    cursor: pointer;
+    background-color: #000; /* Default black background */
+    width: auto;
+    height: 37px;
+    padding: 0 20px; /* Padding to make text-centered buttons responsive */
+    display: inline-flex; /* Flexbox for centering */
+    align-items: center; /* Vertical centering */
+    justify-content: center; /* Horizontal centering */
+    margin: 10px; /* Add space between buttons */
+    position: relative;
+    text-transform: uppercase;
+    font: bold 18px Arial, sans-serif;
+    color: #fff; /* White text */
+    border: none;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for visibility */
+    z-index: 0;
+    transition: all 0.3s ease;
+}
+
+.btn span {
+    color: #fff;
+    text-transform: uppercase;
+    font: bold 18px Arial, sans-serif;
+    letter-spacing: 3px;
+    position: relative;
+    z-index: 1; /* Keep text above the slices */
+    transition: color 0.3s ease;
+}
+
+.btn em {
+    position: absolute;
+    height: 1px;
+    background: #fff; /* White underline */
+    width: 50%;
+    bottom: 0;
+    left: 25%;
+    transform: scaleX(0.25);
+    transform-origin: center;
+    transition: transform 0.3s ease;
+    z-index: 1;
+}
+
+.btn:before,
+.btn:after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 50%;
+    background: #fff; /* Slice color */
+    z-index: 0;
+    transition: width 0.3s cubic-bezier(.785, .135, .15, .86);
+}
+
+.btn:before {
+    top: 0;
+    left: 0;
+}
+
+.btn:after {
+    bottom: 0;
+    right: 0;
+}
+
+.btn:hover:before {
+    width: 100%;
+}
+
+.btn:hover:after {
+    width: 100%;
+}
+
+.btn:hover span {
+    color: #000; /* Text turns black when hovered */
+}
+
+.btn:hover em {
+    transform: scaleX(1); /* Expand underline */
+}
+
+/* Container for Buttons */
+.button-container {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping for multiple buttons */
+    gap: 10px; /* Spacing between buttons */
+    justify-content: center; /* Center buttons horizontally */
+    margin-top: 20px; /* Spacing from other elements */
+}
+
+.alert {
+    padding: 15px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
+.close {
+    float: right;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: 0.5;
+}
+
+.close:hover {
+    color: #000;
+    text-decoration: none;
+    opacity: 0.75;
 }
