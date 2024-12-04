@@ -1,4 +1,6 @@
 <?php
+// Code re-used from Assignment 3 (CSCI 2170) for implementing the user login functionality.
+// The original code was modified to handle session validation and error messaging for Assignment 4.
 session_start();
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -75,6 +77,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="../new-post.php">New Post</a></li>
+                            <li class="nav-item"><a class="nav-link" href="../messages.php">Messages</a></li>
                         <li class="nav-item"><a class="nav-link" href="../includes/login.php">Login</a></li>
                     </ul>
                 </div>

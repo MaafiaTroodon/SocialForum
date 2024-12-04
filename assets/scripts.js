@@ -506,3 +506,38 @@ document.addEventListener("DOMContentLoaded", () => {
         observer.observe(post);
     });
 });
+
+async function performSearch() {
+    const query = document.getElementById('searchInput').value.trim();
+
+    if (query === '') {
+        // Reset posts if the query is empty
+        try {
+            const response = await fetch('api/fetch_posts.php'); // API endpoint to fetch all posts
+            const results = await response.json();
+
+            if (results.success) {
+                displayAllPosts(results.data);
+            } else {
+                console.error('Error fetching posts:', results.error);
+            }
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+        }
+        return;
+    }
+
+    // If query is not empty, perform search
+    try {
+        const response = await fetch('api/search.php?q=' + encodeURIComponent(query));
+        const results = await response.json();
+
+        if (results.success) {
+            filterAndHighlightPosts(results.data, query);
+        } else {
+            console.error('No results found:', results.error);
+        }
+    } catch (error) {
+        console.error('Error fetching search results:', error);
+    }
+}

@@ -12,6 +12,12 @@ body {
     flex-direction: column;
     min-height: 100vh;
 }
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden; 
+}
 
 /* Three.js background container */
 .relative {
@@ -23,7 +29,7 @@ body {
     z-index: -1; /* Ensure it stays behind everything */
     overflow: hidden;
     pointer-events: none; /* Allow interactions with content above */
-    background: transparent; /* No default background to interfere */
+    background: transparent;
 }
 aside{
     color: #bee5eb;
@@ -32,7 +38,7 @@ aside{
 }
 /* Header styling */
 header {
-    position: relative; /* Keep it relative to stack above Three.js */
+    position: relative; 
     z-index: 15; /* Higher than the background */
     background: rgba(255, 255, 255, 0.9); /* Semi-transparent background for contrast */
     padding: 10px 20px;
@@ -489,24 +495,24 @@ textarea:focus {
     position: relative;
     z-index: 10; /* Place above background */
     display: flex;
-    flex-direction: column; /* Stacks items vertically */
-    justify-content: center; /* Vertical centering */
-    align-items: center; /* Horizontal centering */
-    height: 100vh; /* Full viewport height */
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center;
+    height: 100vh;
     padding: 20px;
     box-shadow: #7193ff;
 }
 
 /* Login box styling */
 .login-container {
-    background: rgba(67, 45, 4, 0.8); /* Dark background */
+    background: rgba(67, 45, 4, 0.8); 
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
     text-align: center;
     width: 100%;
     max-width: 400px;
-    z-index: 20; /* Ensure it stays above the spinning object */
+    z-index: 20; 
 }
 
 /* Login heading */
@@ -790,21 +796,22 @@ input:focus, textarea:focus {
     border: 1px solid rgba(255, 255, 255, 0.3);
     padding: 10px;
 }
-/* Footer Styling */
 footer {
     background: rgba(0, 0, 0, 0.8);
     color: white;
     text-align: center;
-    padding: 20px;
+    padding: 10px; /* Reduce padding for smaller screens */
+    font-size: 12px; /* Smaller text size */
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%;
-    z-index: 10; /* Ensure it stays above other elements */
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3); /* Optional: Add shadow for a lifted look */
+    width: 100%; /* Ensure it spans only the viewport width */
+    z-index: 10;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3);
+    max-width: 100%; /* Prevent horizontal overflow */
+    margin: 0 auto;
 }
 
-/* To ensure no content overlaps the footer */
 body {
     padding-bottom: 60px; /* Add padding equal to footer height */
 }
@@ -814,6 +821,7 @@ footer p {
     margin: 0;
     font-size: 0.9rem;
     letter-spacing: 0.5px;
+   
 }
 .main-container h1{
     color: #000;
@@ -875,4 +883,71 @@ footer p {
     max-width: 800px;
     text-align: center;
     z-index: 15; /* Ensure above background */
+}
+/* Adjust font sizes and paddings for smaller screens */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    .forum-wrapper {
+        margin-top: 20px;
+        padding: 10px;
+        width: 95%;
+    }
+
+    .post {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+    }
+
+    .main-container h1 {
+        font-size: 1.8rem;
+    }
+
+    /* Stack buttons vertically for posts */
+    .post-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    /* Navbar adjustments */
+    header {
+        padding: 5px 10px;
+    }
+
+    .navbar-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+    }
+
+    .nav-link {
+        margin-right: 0;
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+}
+@media (max-width: 768px) {
+    footer {
+        font-size: 12px; /* Smaller font size */
+        padding: 10px; /* Reduce padding */
+        text-align: center; /* Center-align content */
+    }
+
+    .forum-wrapper {
+        padding: 10px; /* Reduce padding for smaller screens */
+        margin: 0; /* Align to viewport */
+        width: 100%; /* Full-width container */
+    }
+
+    .post {
+        padding: 10px;
+        margin: 5px 0; /* Smaller margin between posts */
+    }
 }

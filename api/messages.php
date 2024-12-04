@@ -1,7 +1,6 @@
 <?php
 session_start();
-require_once '../includes/db_connect.php'; // Ensure the database connection file is included
-
+require_once '../includes/db_connect.php'; 
 header('Content-Type: application/json');
 
 // Check if user is logged in
