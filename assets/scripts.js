@@ -507,37 +507,105 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+let debounceTimeout;
+
+function debouncedSearch() {
+    clearTimeout(debounceTimeout);
+    debounceTimeout = setTimeout(() => {
+        performSearch();
+    }, 300); // Delay for debounce
+}
+
 async function performSearch() {
     const query = document.getElementById('searchInput').value.trim();
+    const postFeed = document.getElementById('post-feed');
+
+    if (!postFeed) {
+        console.error("Post feed container not found!");
+        return;
+    }
 
     if (query === '') {
-        // Reset posts if the query is empty
+        // Reset to original posts if the search bar is cleared
         try {
-            const response = await fetch('api/fetch_posts.php'); // API endpoint to fetch all posts
+            const response = await fetch('/api/fetch_posts.php'); // Ensure API endpoint matches your setup
             const results = await response.json();
 
             if (results.success) {
-                displayAllPosts(results.data);
+                displayAllPosts(results.data); // Function to display all posts
             } else {
+                postFeed.innerHTML = "<p>Error fetching posts.</p>";
                 console.error('Error fetching posts:', results.error);
             }
         } catch (error) {
             console.error('Error fetching posts:', error);
+            postFeed.innerHTML = "<p>An error occurred while fetching posts.</p>";
         }
         return;
     }
 
-    // If query is not empty, perform search
+    // Perform search
     try {
-        const response = await fetch('api/search.php?q=' + encodeURIComponent(query));
+        const response = await fetch('/api/search.php?q=' + encodeURIComponent(query));
         const results = await response.json();
 
-        if (results.success) {
-            filterAndHighlightPosts(results.data, query);
+        if (results.success && results.data.length > 0) {
+            filterAndHighlightPosts(results.data, query); // Show matching results
         } else {
-            console.error('No results found:', results.error);
+            postFeed.innerHTML = `<p>No results found for "${query}".</p>`; // Show "no results" message
         }
     } catch (error) {
         console.error('Error fetching search results:', error);
+        postFeed.innerHTML = "<p>An error occurred while performing the search.</p>";
     }
+}
+
+function displayAllPosts(posts) {
+    const postFeed = document.getElementById('post-feed');
+    postFeed.innerHTML = ''; // Clear existing content
+
+    posts.forEach(post => {
+        const postDiv = document.createElement('div');
+        postDiv.className = 'post';
+        postDiv.dataset.id = post.post_id;
+
+        postDiv.innerHTML = `
+            <div class="post-content">
+                <h3>${post.title}</h3>
+                <p>${post.content}</p>
+                <p><strong>Author:</strong> ${post.username}</p>
+                <p><em>Posted on:</em> ${new Date(post.created_at).toLocaleString()}</p>
+            </div>
+        `;
+        postFeed.appendChild(postDiv);
+    });
+}
+
+function filterAndHighlightPosts(data, query) {
+    const postFeed = document.getElementById('post-feed');
+    postFeed.innerHTML = ''; // Clear existing posts
+
+    data.forEach(post => {
+        const highlightedTitle = highlightText(post.title, query);
+        const highlightedContent = highlightText(post.content, query);
+
+        const postDiv = document.createElement('div');
+        postDiv.className = 'post';
+        postDiv.dataset.id = post.post_id;
+
+        postDiv.innerHTML = `
+            <div class="post-content">
+                <h3>${highlightedTitle}</h3>
+                <p>${highlightedContent}</p>
+                <p><strong>Author:</strong> ${post.username}</p>
+                <p><em>Posted on:</em> ${new Date(post.created_at).toLocaleString()}</p>
+            </div>
+        `;
+        postFeed.appendChild(postDiv);
+    });
+}
+
+function highlightText(text, query) {
+    const regex = new RegExp(`(${query})`, 'gi');
+    return text.replace(regex, '<span class="highlight">$1</span>');
 }

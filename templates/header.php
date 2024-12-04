@@ -15,6 +15,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Akaya+Kanadaka&family=Nunito:ital,wght@0,700;1,700&family=Outfit:wght@100..900&family=Parkinsans:wght@300..800&family=Roboto:ital,wght@0,700;0,900;1,700;1,900&display=swap" rel="stylesheet">
+<script src="../assets/scripts.js" type="module" defer></script>
     
 </head>
 <!-- Notifications -->
@@ -34,15 +35,14 @@ if (session_status() === PHP_SESSION_NONE) {
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <div class="search-container">
-                                <input 
-                                    type="text" 
-                                    id="searchInput" 
-                                    placeholder="Search posts or users..."
-                                    onkeyup="debouncedSearch()" 
-                                />
-                                <div id="searchResults" class="search-results"></div>
-                            </div>
+                        <div class="search-container">
+    <input 
+        type="text" 
+        id="searchInput" 
+        placeholder="Search posts or users..." 
+        onkeyup="debouncedSearch()" 
+    />
+</div>
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto">
