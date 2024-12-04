@@ -30,3 +30,6 @@ Write the response to this section in bullet points.
 
 5. The hover effect and animation techniques for buttons are inspired by the example “Animated Buttons” on CodePen by Dicson. Available at https://codepen.io/dicson/pen/edoaaY, accessed on December 4, 2024.
 
+6. The Three.js object implementation draws inspiration from the example “Three.js Glowing Sphere” on CodePen by Alphardex. Available at https://codepen.io/alphardex/pen/dyOQyPJ, accessed on December 4, 2024.
+
+7. The fonts used throughout the document are sourced from Google Fonts, specifically utilizing the “Parkinsans”font families. These fonts were integrated into the project via the Google Fonts embed link available at https://fonts.google.com/selection/embed, accessed on December 4, 2024.

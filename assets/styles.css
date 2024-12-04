@@ -2,6 +2,10 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     background: hsl(174, 37%, 47%);
+    font-family: "Parkinsans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
     
     
     display: flex;
@@ -509,7 +513,7 @@ textarea:focus {
 
 /* Input fields styling */
 .login-container input {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(105, 49, 218, 0.2);
     border: 1px solid #fff;
     color: #fff;
     padding: 10px;
@@ -520,7 +524,7 @@ textarea:focus {
 
 .login-container input:focus {
     outline: none;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(56, 79, 234, 0.3);
     border-color: #007bff;
 }
 
@@ -623,7 +627,7 @@ input:focus, textarea:focus {
 
 /* Submit Button */
 .submit-btn {
-    background: linear-gradient(135deg, #ff7eb3, #ff758c);
+    background: linear-gradient(135deg, #ff7eb3, #ff9216);
     border: none;
     border-radius: 5px;
     color: #ffffff;
@@ -638,7 +642,7 @@ input:focus, textarea:focus {
 }
 
 .submit-btn:hover {
-    background: linear-gradient(135deg, #ff4d6d, #ff758c);
+    background: linear-gradient(135deg, #24fff8, #9d12ed);
     transform: scale(1.05);
     box-shadow: 0 8px 20px rgba(255, 120, 150, 0.5);
 }
@@ -665,7 +669,7 @@ input:focus, textarea:focus {
 }
 
 .toggle-btn {
-    background: linear-gradient(135deg, #ff7eb3, #ff758c);
+    background: linear-gradient(135deg, #d3d01a, #0dbeaf);
     border: none;
     color: #ffffff;
     padding: 10px 20px;
@@ -704,7 +708,7 @@ input:focus, textarea:focus {
 }
 
 .submit-btn {
-    background: linear-gradient(135deg, #ff7eb3, #ff758c);
+    background: linear-gradient(135deg, #4664ed, #98ba28);
     color: #ffffff;
     border: none;
     padding: 10px 20px;
