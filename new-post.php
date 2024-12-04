@@ -1,36 +1,3 @@
-<?php
-session_start();
-require_once 'includes/db_connect.php';
-
-// Check if the user is logged in
-if (!isset($_SESSION['user_id'])) {
-    header("Location: includes/login.php");
-    exit();
-}
-
-$error = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $title = trim($_POST['title']);
-    $content = trim($_POST['content']);
-    $user_id = $_SESSION['user_id'];
-
-    if (!empty($title) && !empty($content)) {
-        try {
-            $stmt = $mysqli->prepare("INSERT INTO posts (user_id, title, content) VALUES (?, ?, ?)");
-            $stmt->bind_param("iss", $user_id, $title, $content);
-            $stmt->execute();
-
-            // Redirect to index.php
-            header("Location: index.php");
-            exit();
-        } catch (Exception $e) {
-            $error = "Error saving the post: " . $e->getMessage();
-        }
-    } else {
-        $error = "All fields are required.";
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,28 +5,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create New Post</title>
     <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <?php include 'templates/header.php'; ?> <!-- Include header -->
-
-    <div class="main-container">
+    <?php include 'templates/header.php'; ?>
+<div class="ex-container">
+    <div class="new-post-container">
         <h1>Create a New Post</h1>
 
         <?php if (!empty($error)): ?>
-            <p style="color: red;"><?= htmlspecialchars($error); ?></p>
+            <div class="error-message"><?= htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
-        <form method="POST" action="new-post.php">
-            <label for="title">Title:</label>
-            <input type="text" id="title" name="title" required>
-            <br>
-            <label for="content">Content:</label>
-            <textarea id="content" name="content" required></textarea>
-            <br>
-            <button type="submit">Post</button>
-        </form>
-    </div>
+        <form class="new-post-form" method="POST" action="new-post.php">
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" placeholder="Enter your post title..." required>
+            </div>
 
-    <?php include 'templates/footer.php'; ?> <!-- Include footer -->
+            <div class="form-group">
+                <label for="content">Content:</label>
+                <textarea id="content" name="content" placeholder="Write your post content here..." required></textarea>
+            </div>
+
+            <button class="submit-btn" type="submit">
+                <span>Post</span>
+                <i class="fas fa-paper-plane"></i>
+                
+            </button>
+        </form>
+        <button class="btn" type="submit">
+        <a href="index.php">
+                <span>Go Back to Forum Page</span>
+                <i class="fas fa-arrow-right"></i>
+                </a>
+            </button>
+            
+    </div>
+    </div>
+    <?php include 'templates/footer.php'; ?>
 </body>
 </html>

@@ -22,7 +22,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
-                <a class="navbar-brand" href="index.php">
+                <a class="navbar-brand" href="../index.php">
                     <img src="img/logo-img.jpeg" alt="Dalhousie Forum Logo" class="d-inline-block align-text-top" style="height: 50px;">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,6 +48,8 @@ if (session_status() === PHP_SESSION_NONE) {
                             <li class="nav-item"><a class="nav-link" href="messages.php">Messages</a></li>
                             <li class="nav-item"><a class="nav-link" href="includes/logout.php">Logout</a></li>
                         <?php else: ?>
+                            <li class="nav-item"><a class="nav-link" href="new-post.php">New Post</a></li>
+                            <li class="nav-item"><a class="nav-link" href="messages.php">Messages</a></li>
                             <li class="nav-item"><a class="nav-link" href="includes/login.php">Login</a></li>
                         <?php endif; ?>
                     </ul>

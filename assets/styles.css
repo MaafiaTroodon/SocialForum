@@ -1,10 +1,12 @@
-/* General body styling */
 body {
     font-family: Arial, sans-serif;
-    line-height: 1.6;
     margin: 0;
-    overflow: auto; /* Allow scrolling for posts */
-    background: hsl(240, 56%, 98%);
+    background: hsl(174, 37%, 47%);
+    
+    
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 /* Three.js background container */
@@ -18,7 +20,11 @@ body {
     overflow: hidden;
     pointer-events: none; /* Allow interactions with content */
 }
-
+aside{
+    color: #bee5eb;
+    background-color: whitesmoke;
+    background: white;
+}
 /* Header styling */
 header {
     position: relative; /* Keep it relative to stack above Three.js */
@@ -203,7 +209,7 @@ textarea:focus {
 }
 .btn {
     cursor: pointer;
-    background-color: #000; /* Default black background */
+    background-color: #5d3c1d; /* Default black background */
     width: auto;
     height: 37px;
     padding: 0 20px; /* Padding to make text-centered buttons responsive */
@@ -218,13 +224,13 @@ textarea:focus {
     border: none;
     border-radius: 5px;
     overflow: hidden;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow for visibility */
+    box-shadow: 0px 2px 5px rgba(255, 212, 212, 0.2); /* Add shadow for visibility */
     z-index: 0;
     transition: all 0.3s ease;
 }
 
 .btn span {
-    color: #fff;
+    color: #fffbfb;
     text-transform: uppercase;
     font: bold 18px Arial, sans-serif;
     letter-spacing: 3px;
@@ -252,7 +258,7 @@ textarea:focus {
     position: absolute;
     width: 0;
     height: 50%;
-    background: #fff; /* Slice color */
+    background: hsl(116, 25%, 66%); /* Slice color */
     z-index: 0;
     transition: width 0.3s cubic-bezier(.785, .135, .15, .86);
 }
@@ -416,7 +422,7 @@ textarea:focus {
 /* Update button with animation */
 #editPostForm button {
     cursor: pointer;
-    background-color: #000; /* Default black background */
+    background-color: #CCCCCC; /* Default black background */
     width: auto;
     height: 37px;
     padding: 0 20px; /* Padding to make text-centered buttons responsive */
@@ -465,4 +471,304 @@ textarea:focus {
 #editPostForm button:hover::before {
     opacity: 1;
     transform: rotate(45deg) translateX(100%);
+}
+/* Three.js background container */
+
+
+/* Main container for centering content */
+.container {
+    position: relative;
+    z-index: 10; /* Place above background */
+    display: flex;
+    flex-direction: column; /* Stacks items vertically */
+    justify-content: center; /* Vertical centering */
+    align-items: center; /* Horizontal centering */
+    height: 100vh; /* Full viewport height */
+    padding: 20px;
+    box-shadow: #7193ff;
+}
+
+/* Login box styling */
+.login-container {
+    background: rgba(67, 45, 4, 0.8); /* Dark background */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+    text-align: center;
+    width: 100%;
+    max-width: 400px;
+    z-index: 20; /* Ensure it stays above the spinning object */
+}
+
+/* Login heading */
+.login-container h1 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+/* Input fields styling */
+.login-container input {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.login-container input:focus {
+    outline: none;
+    background: rgba(255, 255, 255, 0.3);
+    border-color: #007bff;
+}
+
+
+
+
+
+/* Guest container styling */
+.guest-container {
+    background: rgba(48, 43, 81, 0.8); /* Same as login background */
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
+    text-align: center;
+    z-index: 20; /* Ensure it stays above the spinning object */
+    box-shadow: #7193ff;
+}
+
+.guest-container a {
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.guest-container a:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: scale(1.05);
+}
+.ex-container{
+    padding-top: 10%;
+    display: flex;
+    justify-content: center; /* Horizontally center content */
+    align-items: center;
+}
+/* New Post Container */
+.new-post-container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
+    justify-content: center; /* Horizontally center content */
+    align-items: center;
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Form Styling */
+.new-post-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+h1 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #ffffff;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+label {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 2px solid #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #ffd700;
+    box-shadow: 0 0 10px #ffd700;
+}
+
+/* Submit Button */
+.submit-btn {
+    background: linear-gradient(135deg, #ff7eb3, #ff758c);
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s;
+}
+
+.submit-btn:hover {
+    background: linear-gradient(135deg, #ff4d6d, #ff758c);
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(255, 120, 150, 0.5);
+}
+
+.submit-btn:active {
+    transform: scale(1);
+    box-shadow: 0 4px 10px rgba(255, 120, 150, 0.3);
+}
+.message-container {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 800px;
+    text-align: center;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.message-heading {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.toggle-btn {
+    background: linear-gradient(135deg, #ff7eb3, #ff758c);
+    border: none;
+    color: #ffffff;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.toggle-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 15px rgba(255, 120, 150, 0.4);
+}
+
+.message-form {
+    margin: 20px 0;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.form-control {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #ffd700;
+    box-shadow: 0 0 10px #ffd700;
+    outline: none;
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, #ff7eb3, #ff758c);
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.submit-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 15px rgba(255, 120, 150, 0.4);
+}
+
+.table-custom {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #ffffff;
+    width: 100%;
+    text-align: left;
+}
+
+.table-custom th, .table-custom td {
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 10px;
+}
+/* Footer Styling */
+footer {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    text-align: center;
+    padding: 20px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10; /* Ensure it stays above other elements */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.3); /* Optional: Add shadow for a lifted look */
+}
+
+/* To ensure no content overlaps the footer */
+body {
+    padding-bottom: 60px; /* Add padding equal to footer height */
+}
+
+/* Optional: Footer Text Styling */
+footer p {
+    margin: 0;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+.main-container h1{
+    color: #000;
+    font-size: 2.5rem;
+    margin: 0;
+    color: #391b28;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+.main-container{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    z-index: 2;
+    animation: fadeInUp 1s ease-in-out;
 }

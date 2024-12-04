@@ -28,3 +28,5 @@ Write the response to this section in bullet points.
 
 4.	The content for the post titled Dal reputation in Canada is adapted from Reddit at https://www.reddit.com/r/Dalhousie/comments/113bg75/dal_reputation_in_canada/, accessed on November 28, 2024.
 
+5. The hover effect and animation techniques for buttons are inspired by the example “Animated Buttons” on CodePen by Dicson. Available at https://codepen.io/dicson/pen/edoaaY, accessed on December 4, 2024.
+

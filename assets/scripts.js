@@ -1,16 +1,26 @@
 import * as THREE from "https://cdn.skypack.dev/three@0.124.0";
 import { OrbitControls } from "https://cdn.skypack.dev/three@0.124.0/examples/jsm/controls/OrbitControls";
 
-// Three.js Implementation
 class GridIcosahedron {
     constructor(container) {
+        console.log("Initializing GridIcosahedron...");
         this.container = document.querySelector(container);
+        if (!this.container) {
+            console.error("Three.js container not found!");
+            return;
+        }
         this.init();
     }
 
     init() {
+        console.log("Initializing Three.js scene...");
         this.scene = new THREE.Scene();
-        this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        this.camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
         this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.container.appendChild(this.renderer.domElement);
@@ -26,6 +36,7 @@ class GridIcosahedron {
     }
 
     createIcosahedron() {
+        console.log("Creating Icosahedron...");
         const geometry = new THREE.IcosahedronGeometry(1, 1);
         const material = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true });
         this.icosahedron = new THREE.Mesh(geometry, material);
@@ -33,37 +44,52 @@ class GridIcosahedron {
     }
 
     addLight() {
+        console.log("Adding ambient light...");
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         this.scene.add(ambientLight);
     }
 
     createControls() {
+        console.log("Setting up OrbitControls...");
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enableDamping = true;
     }
 
     scrollEffect() {
+        console.log("Setting up scroll effect...");
         window.addEventListener("scroll", () => {
             const scrollY = window.scrollY || document.documentElement.scrollTop;
             const scale = 1 + scrollY / 1000;
-            this.icosahedron.scale.set(scale, scale, scale);
+            if (this.icosahedron) {
+                this.icosahedron.scale.set(scale, scale, scale);
+            }
         });
     }
 
     animate() {
         requestAnimationFrame(() => this.animate());
-        this.icosahedron.rotation.x += 0.005;
-        this.icosahedron.rotation.y += 0.005;
+        if (this.icosahedron) {
+            this.icosahedron.rotation.x += 0.005;
+            this.icosahedron.rotation.y += 0.005;
+        }
         this.controls.update();
         this.renderer.render(this.scene, this.camera);
     }
 
     onResize() {
+        console.log("Handling resize...");
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
     }
 }
+
+// Usage:
+// Ensure the element with class `.grid-icosahedron` exists in the DOM
+document.addEventListener("DOMContentLoaded", () => {
+    const containerSelector = ".grid-icosahedron";
+    const gridIcosahedron = new GridIcosahedron(containerSelector);
+});
 
 async function fetchPosts() {
     try {
@@ -303,7 +329,14 @@ window.addComment = async function (postId) {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
-    new GridIcosahedron(".grid-icosahedron");
+    document.addEventListener("DOMContentLoaded", () => {
+        const gridContainer = document.querySelector(".grid-icosahedron");
+        if (gridContainer) {
+            new GridIcosahedron(".grid-icosahedron");
+        } else {
+            console.error("Grid container not found!");
+        }
+    });
     fetchPosts();
 });
 
@@ -358,37 +391,49 @@ async function fetchMessages() {
     }
 }
 
-newMessageForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
+    const editPostForm = document.getElementById("editPostForm");
 
-    const recipient = document.getElementById('recipient').value.trim();
-    const message = document.getElementById('message').value.trim();
+    // Only attach event listeners if the edit form exists
+    if (editPostForm) {
+        editPostForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
 
-    if (!recipient || !message) {
-        addNotification('danger', 'Please fill in both fields.');
-        return;
-    }
+            const postId = document.getElementById("editPostId").value;
+            const title = document.getElementById("editTitle").value.trim();
+            const content = document.getElementById("editContent").value.trim();
 
-    try {
-        const response = await fetch('api/messages.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ recipient, message }),
+            if (!title || !content) {
+                alert("Both title and content are required!");
+                return;
+            }
+
+            try {
+                const response = await fetch("api/edit_post.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ postId, title, content }),
+                });
+
+                const result = await response.json();
+                if (result.success) {
+                    alert("Post updated successfully!");
+                    document.getElementById("editModal").style.display = "none";
+                    fetchPosts(); // Refresh posts
+                } else {
+                    alert(result.error || "Failed to update post.");
+                }
+            } catch (error) {
+                console.error("Error editing post:", error);
+                alert("An error occurred. Please try again.");
+            }
         });
-
-        const result = await response.json();
-
-        if (result.success) {
-            addNotification('success', 'Message sent successfully!');
-            toggleMessageForm(); // Close the form
-            fetchMessages(); // Refresh messages
-        } else {
-            addNotification('danger', result.error || 'Failed to send the message.');
-        }
-    } catch (error) {
-        addNotification('danger', 'An error occurred. Please try again.');
-        console.error('Error sending message:', error);
+    } else {
+        console.warn("#editPostForm is not present on this page.");
     }
+
+    // Fetch posts after ensuring the modal doesn't interfere
+    fetchPosts();
 });
 
 function addNotification(type, message) {
@@ -427,3 +472,37 @@ function capitalize(str) {
 }
 
 
+document.addEventListener("DOMContentLoaded", () => {
+    const container = document.querySelector(".grid-icosahedron");
+    if (!container) {
+        console.error("Three.js container element not found!");
+        return;
+    }
+
+    // Initialize Three.js if the container exists
+    new GridIcosahedron(".grid-icosahedron");
+});
+document.addEventListener("DOMContentLoaded", () => {
+    const posts = document.querySelectorAll(".post");
+
+    // Use Intersection Observer for scroll-based animations
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("visible");
+                } else {
+                    entry.target.classList.remove("visible");
+                }
+            });
+        },
+        {
+            threshold: 0.1, // Trigger when 10% of the element is visible
+        }
+    );
+
+    // Observe each post
+    posts.forEach((post) => {
+        observer.observe(post);
+    });
+});
