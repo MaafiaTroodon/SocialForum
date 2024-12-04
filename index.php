@@ -71,5 +71,16 @@ require_once 'includes/db_connect.php';
     </div>
 
     <?php include 'templates/footer.php'; ?>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const notification = document.getElementById("notification");
+        if (notification) {
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => notification.remove(), 1000); // Remove element after fade-out
+            }, 5000); // Display for 5 seconds
+        }
+    });
+</script>
 </body>
 </html>

@@ -9,7 +9,13 @@
             <input type="text" id="editTitle" required>
             <label for="editContent">Content:</label>
             <textarea id="editContent" required></textarea>
-            <button type="submit" class="btn btn-success">Update</button>
+         
+            <button class="btn btn-success" type="submit">
+      
+                <span>Update</span>
+                <i class="fas fa-arrow-right"></i>
+          
+            </button>
         </form>
     </div>
 </div>

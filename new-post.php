@@ -6,9 +6,13 @@
     <title>Create New Post</title>
     <link rel="stylesheet" href="assets/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
 </head>
 <body>
     <?php include 'templates/header.php'; ?>
+    <div class="relative">
+        <div class="grid-icosahedron"></div>
+    </div>
 <div class="ex-container">
     <div class="new-post-container">
         <h1>Create a New Post</h1>
@@ -44,5 +48,38 @@
     </div>
     </div>
     <?php include 'templates/footer.php'; ?>
+    <script>
+    document.querySelector('.new-post-form').addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevent the default form submission
+        
+        const form = event.target;
+        const formData = new FormData(form);
+
+        try {
+            const response = await fetch('api/posts.php', {
+                method: 'POST',
+                body: JSON.stringify({
+                    title: formData.get('title'),
+                    content: formData.get('content'),
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Redirect back to index.php with a success message
+                window.location.href = 'index.php?message=Post added successfully!';
+            } else {
+                alert(result.error || 'Failed to add post. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error adding post:', error);
+            alert('An error occurred. Please try again.');
+        }
+    });
+</script>
 </body>
 </html>
