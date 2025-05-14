@@ -1,6 +1,4 @@
-# CSCI 2170: Intro to Server-Side Scripting
-
-__*Assignment 4 - Dalhousie University Forum*__
+# Reddit Clone Wesbite
 
 ## Student Information
 
