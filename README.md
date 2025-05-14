@@ -14,7 +14,7 @@ The Dalhousie Forum application is a server-side scripting project designed as a
 
 Users can interact with the forum through login credentials. Logged-in users have full access to the system, allowing them to manage their posts and comments, while guests are restricted to viewing content. The forum feed dynamically fetches posts from a database and displays them in descending order of creation date. Moderation functionalities, such as editing or deleting posts, are only accessible to logged-in users. Notifications and hover animations enhance the interactivity of the platform.
 
-To test the application, the TAs/markers can use the provided test credentials:
+To test the application, you can use the provided test credentials:
 	•	Username: john_doe
 	•	Password: password123
 
